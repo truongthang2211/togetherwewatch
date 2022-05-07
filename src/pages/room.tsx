@@ -1,5 +1,6 @@
 import { useState } from "react";
 import YouTube from "react-youtube";
+import ChatItem from "../components/ChatItem";
 
 export default function Room() {
   const [like, setLike] = useState(false);
@@ -35,7 +36,7 @@ export default function Room() {
             onReady={_onReady}
             className="h-2/3 lg:h-3/5 xl:h-4/5"
           />
-          <div className="flex justify-between p-3">
+          <div className="flex justify-between p-3 bg-white items-center">
             <div className="text-gray-500">
               <i className="fa-solid fa-eye"></i>
               <span className="ml-2 ">88 người đang xem</span>
@@ -61,8 +62,59 @@ export default function Room() {
               <span className="ml-2 text-sm ">Thêm link</span>
             </div>
           </div>
+          <div className="mt-3 text-center bg-white border-gray-300 border-2 p-3 mx-1 shadow-md">
+            <h2 className="text-xl font-medium">Cat Falling</h2>
+            <div className="text-gray-500 mt-2">Thời lượng: 1:00:00</div>
+          </div>
         </div>
-        <div className="w-full lg:w-[348px] xl:w-[400px]"></div>
+
+        <div className="flex flex-col h-[calc(100vh-64px)] pb-2  w-full lg:w-[348px] xl:w-[400px]">
+          <div className="p-3 bg-white text-center border-y-2 border-gray-400">
+            <h1 className="font-medium">#368156</h1>
+            <h2>Vô chơi đi mấy đứa</h2>
+          </div>
+          <div className="flex flex-col h-full p-3 bg-white">
+            <div className="flex-1 overflow-y-scroll space-y-4">
+              <ChatItem />
+              <ChatItem />
+              <ChatItem />
+              <ChatItem />
+              <ChatItem />
+              <ChatItem />
+              <ChatItem />
+            </div>
+            <div className="">
+              <div className="bg-transparent h-14 py-2">
+                {/* <textarea className="outline-none items-center px-3 h-full w-full border-2 border-gray-300 rounded-full bg-white"></textarea> */}
+                <div
+                  role="textbox"
+                  aria-haspopup="listbox"
+                  aria-invalid="false"
+                  aria-autocomplete="list"
+                  className="relative outline-none whitespace-pre-wrap break-words h-auto w-full px-3 border-2 border-gray-300 rounded-full bg-white"
+                  data-can-focus="true"
+                  aria-label="Message #chit-chat"
+                  aria-multiline="true"
+                  data-slate-editor="true"
+                  data-slate-node="value"
+                  contentEditable="true"
+                >
+                  <div data-slate-node="element">
+                    <span data-slate-node="text">
+                      <span data-slate-leaf="true" className="emptyText-1o0WH_">
+                        <span
+                          data-slate-zero-width="n"
+                          data-slate-length="0"
+                        ></span>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-400 h-6"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
