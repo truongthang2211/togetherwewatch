@@ -17,3 +17,31 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 20px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: rgb(209 213 219 / 1);
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #f87171;
+    border-radius: 100vh;
+    border: 1px solid #86efac;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #86efac;
+  }
+  [contenteditable][placeholder]:empty:before {
+    content: attr(placeholder);
+    position: absolute;
+    color: gray;
+    background-color: transparent;
+  }
+}

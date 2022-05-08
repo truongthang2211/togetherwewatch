@@ -1,5 +1,9 @@
 import Image from "next/image";
-export default function ChatItem() {
+
+interface ChatItem {
+  commentText: string;
+}
+export default function ChatItem({ commentText }: ChatItem) {
   return (
     <>
       <div className="w-full flex bg-white items-start space-x-2">
@@ -11,12 +15,7 @@ export default function ChatItem() {
             <span className="font-medium">Nguyễn Thắng</span>
             <span className="text-sm text-gray-400">Hôm nay 17:23:15</span>
           </div>
-          <div className="">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ex hic
-            quia consectetur architecto optio quas sequi eveniet ipsam
-            laboriosam neque impedit, unde soluta obcaecati consequuntur nam
-            sapiente! Ratione, aliquam?
-          </div>
+          <div className="">{commentText}</div>
         </div>
       </div>
     </>
