@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     container: {
       padding: {
-        default: "1rem",
-        sm: "2rem",
+        sm: "1rem",
+        xl: "4rem",
         "2xl": "10rem",
       },
     },
@@ -19,6 +19,10 @@ module.exports = {
       keyframes: {
         fadeDown: {
           "0%": { transform: "translateY(-100px)", opacity: "0" },
+          "100%": { transform: "translateY(0px)", opacity: "1" },
+        },
+        fadeUp: {
+          "0%": { transform: "translateY(100px)", opacity: "0" },
           "100%": { transform: "translateY(0px)", opacity: "1" },
         },
         fade: {
@@ -35,6 +39,7 @@ module.exports = {
       },
       animation: {
         fadeDown: "1s ease-out 0s 1 fadeDown forwards",
+        fadeUp: "0.5s ease-out 0s 1 fadeUp forwards",
         fade: "1s ease-out 0s 1 fade forwards",
         typing: "typing 1.5s ease-in-out infinite",
       },

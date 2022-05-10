@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function HomeRoomCard() {
   return (
     <>
-      <div className=" h-[300px] shadow-md rounded-lg overflow-hidden hover:scale-[105%] hover:shadow-lg transition-all ease-out duration-200">
+      <div className=" h-[400px] md:h-[300px] shadow-md rounded-lg overflow-hidden hover:scale-[105%] hover:shadow-lg transition-all ease-out duration-200">
         <Link href="/room">
           <div className="h-2/3 relative group">
             <Image src={"/img/maxresdefault.jpg"} layout="fill" />

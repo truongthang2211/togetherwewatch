@@ -7,9 +7,7 @@ export default function DefaulLayout({
   return (
     <>
       <Navbar />
-      <div className="bg-gray-100 min-h-[calc(100vh-64px)] mt-16">
-        {children}
-      </div>
+      <div className="bg-gray-100 h-[calc(100vh-64px)] mt-16">{children}</div>
     </>
   );
 }
