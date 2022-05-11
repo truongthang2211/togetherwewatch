@@ -10,13 +10,14 @@ export default function ChatItem({ commentText }: ChatItem) {
         <div className="relative rounded-full w-12 h-12 overflow-hidden">
           <Image layout="fill" src="/img/pepe3.jpg" objectFit="cover" />
         </div>
-        <div className="flex  flex-1 flex-col">
+        <div className="flex flex-1 flex-col">
           <div className="flex space-x-2 items-center">
             <span className="font-medium">Nguyễn Thắng</span>
             <span className="text-sm text-gray-400">Hôm nay 17:23:15</span>
           </div>
           <div
-            className="break-words"
+            className="max-w-fit"
+            style={{ wordBreak: "break-word" }}
             dangerouslySetInnerHTML={{ __html: commentText }}
           />
         </div>

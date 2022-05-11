@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import YouTube from "react-youtube";
 import ChatBarSide from "../components/CharBarSide";
+import Popup from "../components/Popup";
 
 export default function Room() {
   const [like, setLike] = useState(false);
   const [dislike, setDiskike] = useState(false);
-
+  const [openAddLink, setOpenAddLink] = useState(false);
   const opts = {
     height: "100%",
     width: "100%",
@@ -62,9 +63,17 @@ export default function Room() {
               </div>
             </div>
             {/* ActionBar */}
-            <div className="py-2 px-3 text-lg w-28 h-10 text-center text-white rounded-full flex items-center justify-center bg-blue-500 hover:cursor-pointer hover:bg-blue-600">
+            <div
+              onClick={() => {
+                setOpenAddLink(true);
+              }}
+              className="py-2 px-3 text-lg w-28 h-10 text-center text-white rounded-full flex items-center justify-center bg-blue-500 hover:cursor-pointer hover:bg-blue-600"
+            >
               <i className="fa-solid fa-plus"></i>
               <span className="ml-2 text-sm ">Thêm link</span>
+              <Popup open={openAddLink}>
+                <div className="bg-white text-black">em dep lam</div>
+              </Popup>
             </div>
           </div>
           {/* Video Info */}

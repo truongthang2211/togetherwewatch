@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import ChatItem from "../components/ChatItem";
 import TypingDots from "../components/TypingDots";
 import { ContentEditable } from "./ContentEditable";
+import removeSpace from "../utils/RemoveSpace";
 export default function ChatBarSide() {
   const [newMessage, setNewMessage] = useState({
     isNewMessage: false,
@@ -11,13 +12,22 @@ export default function ChatBarSide() {
   const ScrollBottomRef = useRef(null);
   const [commentList, setCommentList] = useState([]);
   const [commentText, setCommentText] = useState("");
+
   useEffect(() => {
     document.getElementById("input_message").focus();
+    ChatListRef.current.addEventListener("scroll", handleOnScroll);
   }, []);
   useEffect(() => {
     const IsViewingHistory =
-      ChatListRef.current.scrollHeight - ChatListRef.current.scrollTop > 1000;
-    console.log(IsViewingHistory);
+      ChatListRef.current.scrollTop <
+      ChatListRef.current.scrollHeight -
+        ChatListRef.current.clientHeight -
+        64 * 5;
+    console.log(
+      ChatListRef.current.scrollTop,
+      ChatListRef.current.scrollHeight,
+      ChatListRef.current.clientHeight
+    );
     if (!IsViewingHistory) {
       ScrollBottomRef.current?.scrollIntoView({ behavior: "smooth" });
     } else {
@@ -40,7 +50,7 @@ export default function ChatBarSide() {
       if (commentText.trim() === "") return;
       setCommentList([
         ...commentList,
-        { comment_text: commentText.replaceAll("&nbsp;", "").trim() },
+        { comment_text: removeSpace(commentText.trim()) },
       ]);
       setCommentText("");
       console.log(commentList);
@@ -56,6 +66,13 @@ export default function ChatBarSide() {
     ScrollBottomRef.current?.scrollIntoView({ behavior: "smooth" });
     setNewMessage({ numNewMessage: 0, isNewMessage: false });
   };
+  const handleOnScroll = () => {
+    if (
+      ChatListRef.current.scrollTop + 64 * 2 >=
+      ChatListRef.current.scrollHeight - ChatListRef.current.clientHeight
+    )
+      setNewMessage({ numNewMessage: 0, isNewMessage: false });
+  };
   return (
     <div className="flex flex-col bg-white h-[calc(100vh-64px)] pb-2  w-full lg:w-[348px] xl:w-[400px] ">
       <div className="p-3  text-center border-y-2 border-gray-400">
@@ -67,8 +84,8 @@ export default function ChatBarSide() {
         className="flex flex-col flex-1 space-y-4 overflow-y-auto scrollbar p-3"
       >
         {commentList.map((e, index) => (
-          <div ref={ScrollBottomRef}>
-            <ChatItem key={index} commentText={e.comment_text} />
+          <div ref={ScrollBottomRef} key={index}>
+            <ChatItem commentText={e.comment_text} />
           </div>
         ))}
       </div>
