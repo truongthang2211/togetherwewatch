@@ -1,9 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import YouTube from "react-youtube";
+import Swal from "sweetalert2";
 import ChatBarSide from "../components/CharBarSide";
 import Popup from "../components/Popup";
+import ValidYoutubeURL, { youtube_id } from "../utils/YoutubeUtils";
 
 export default function Room() {
+  const [youtube, setYoutube] = useState({
+    url: "",
+    valid_url: true,
+    title: "",
+    youtube_id: "kyck8iUOTKU",
+    duration: 0,
+  });
   const [like, setLike] = useState(false);
   const [dislike, setDiskike] = useState(false);
   const [openAddLink, setOpenAddLink] = useState(false);
@@ -33,14 +42,42 @@ export default function Room() {
     console.log(openAddLink);
     setOpenAddLink((e) => !e);
   };
-  console.log("link" + openAddLink);
+
+  const handleOnYoutubeUrlChange = async (e) => {
+    const url = e.target.value;
+    if (ValidYoutubeURL(e.target.value)) {
+      try {
+        const dataYoutube = await (
+          await fetch(`http://www.youtube.com/oembed?url=${url}&format=json`)
+        ).json();
+        // Swal.fire({
+        //   text: "Thêm video thành công",
+        //   icon: "success",
+        //   confirmButtonText: "Hay",
+        // });
+        setYoutube({
+          ...youtube,
+          title: dataYoutube.title,
+          url: url,
+          youtube_id: youtube_id(url),
+          valid_url: true,
+        });
+
+        setOpenAddLink(false);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      setYoutube({ ...youtube, url: e.target.value, valid_url: false });
+    }
+  };
   return (
     <>
       <div className="flex flex-wrap lg:flex-nowrap animate-fadeDown">
         {/* Left Side */}
         <div className="w-full lg:flex-1 h-[calc(100vh-64px)] flex flex-col">
           <YouTube
-            videoId="kyck8iUOTKU"
+            videoId={youtube.youtube_id}
             opts={opts}
             onReady={_onReady}
             className="h-2/3 lg:h-3/5 xl:h-4/5"
@@ -77,12 +114,38 @@ export default function Room() {
               <span className="ml-2 text-sm ">Thêm link</span>
             </div>
             <Popup trigger={openAddLink} setTrigger={handleClosePopup}>
-              <div className="bg-white text-black">em dep lam</div>
+              <div className="w-1/2">
+                <div className="py-2 px-3 rounded-full bg-white border-2 border-gray-500 flex items-center">
+                  <i className="fa-brands fa-youtube text-xl text-red-500"></i>
+
+                  <input
+                    value={youtube.url}
+                    onFocus={(e) => {
+                      e.currentTarget.select();
+                    }}
+                    onChange={handleOnYoutubeUrlChange}
+                    placeholder="Nhập đường dẫn youtube mà bạn muốn share"
+                    autoFocus
+                    type="text"
+                    className="py-1 px-3 outline-none w-full"
+                  />
+                </div>
+                <div
+                  className={`bg-transparent text-red-400 mt-2 pl-4 transition-opacity duration-150 ${
+                    youtube.valid_url ? "opacity-0" : "opacity-100"
+                  }`}
+                >
+                  <i className="fa-solid fa-circle-exclamation"></i>
+                  <span className="font-medium ml-2">
+                    Đường dẫn không hợp lệ
+                  </span>
+                </div>
+              </div>
             </Popup>
           </div>
           {/* Video Info */}
           <div className="mt-3 xl:my-auto text-center bg-white border-gray-300 border-2 p-3 mx-1 shadow-md">
-            <h2 className="text-xl font-medium">Cat Falling</h2>
+            <h2 className="text-xl font-medium">{youtube.title}</h2>
             <div className="text-gray-500 mt-2">Thời lượng: 1:00:00</div>
           </div>
         </div>

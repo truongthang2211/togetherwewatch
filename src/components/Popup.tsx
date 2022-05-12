@@ -19,7 +19,7 @@ export default function Popup({ trigger, children, setTrigger }: Popup) {
         <div
           ref={ModalRef}
           onClick={handleOutsideClick}
-          className="fixed bg-black bg-opacity-50 top-0 left-0 right-0 bottom-0 z-40 flex flex-col justify-center items-center"
+          className="fixed bg-black bg-opacity-50 top-0 left-0 right-0 bottom-0 z-40 flex flex-col justify-center items-center animate-fade"
         >
           <div className="relative z-50 pointer-events-auto "></div>
           {children}
