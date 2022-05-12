@@ -1,22 +1,27 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 
 interface Popup {
-  open: boolean;
+  trigger: boolean;
   children: React.ReactNode;
+  setTrigger: (e) => void;
 }
-export default function Popup({ open, children }: Popup) {
-  const [openModal, setOpenModal] = useState(false);
-  const handleOnClose = () => {
-    console.log("eheheh");
+export default function Popup({ trigger, children, setTrigger }: Popup) {
+  const ModalRef = useRef(null);
+
+  const handleOutsideClick = (e) => {
+    if (e.target === ModalRef.current) {
+      setTrigger(e);
+    }
   };
   return (
     <>
-      {open && (
+      {trigger && (
         <div
-          onClick={handleOnClose}
-          className="fixed bg-black bg-opacity-50 top-0 left-0 right-0 bottom-0 z-40"
+          ref={ModalRef}
+          onClick={handleOutsideClick}
+          className="fixed bg-black bg-opacity-50 top-0 left-0 right-0 bottom-0 z-40 flex flex-col justify-center items-center"
         >
-          <div className="relative z-50 pointer-events-auto m-auto"></div>
+          <div className="relative z-50 pointer-events-auto "></div>
           {children}
         </div>
       )}

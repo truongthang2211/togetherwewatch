@@ -28,6 +28,12 @@ export default function Room() {
       dislike && setDiskike(false);
     }
   };
+  const handleClosePopup = (e) => {
+    e.stopPropagation();
+    console.log(openAddLink);
+    setOpenAddLink((e) => !e);
+  };
+  console.log("link" + openAddLink);
   return (
     <>
       <div className="flex flex-wrap lg:flex-nowrap animate-fadeDown">
@@ -64,17 +70,15 @@ export default function Room() {
             </div>
             {/* ActionBar */}
             <div
-              onClick={() => {
-                setOpenAddLink(true);
-              }}
+              onClick={handleClosePopup}
               className="py-2 px-3 text-lg w-28 h-10 text-center text-white rounded-full flex items-center justify-center bg-blue-500 hover:cursor-pointer hover:bg-blue-600"
             >
               <i className="fa-solid fa-plus"></i>
               <span className="ml-2 text-sm ">Thêm link</span>
-              <Popup open={openAddLink}>
-                <div className="bg-white text-black">em dep lam</div>
-              </Popup>
             </div>
+            <Popup trigger={openAddLink} setTrigger={handleClosePopup}>
+              <div className="bg-white text-black">em dep lam</div>
+            </Popup>
           </div>
           {/* Video Info */}
           <div className="mt-3 xl:my-auto text-center bg-white border-gray-300 border-2 p-3 mx-1 shadow-md">
