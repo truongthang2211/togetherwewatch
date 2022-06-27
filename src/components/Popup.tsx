@@ -16,13 +16,14 @@ export default function Popup({ trigger, children, setTrigger }: Popup) {
   return (
     <>
       {trigger && (
-        <div
-          ref={ModalRef}
-          onClick={handleOutsideClick}
-          className="fixed bg-black bg-opacity-50 top-0 left-0 right-0 bottom-0 z-40 flex flex-col justify-center items-center animate-fade"
-        >
-          <div className="relative z-50 pointer-events-auto "></div>
-          {children}
+        <div className="fixed bg-black bg-opacity-50 top-0 left-0 right-0 bottom-0 z-40 animate-fade">
+          <div
+            ref={ModalRef}
+            onMouseDown={handleOutsideClick}
+            className="h-[calc(100vh-64px)] flex flex-col justify-center items-center "
+          >
+            {children}
+          </div>
         </div>
       )}
     </>

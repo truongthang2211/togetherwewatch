@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import ChatItem from "../components/ChatItem";
 import TypingDots from "../components/TypingDots";
 import { ContentEditable } from "./ContentEditable";
 import removeSpace from "../utils/RemoveSpace";
-export default function ChatBarSide() {
+function ChatBarSide() {
   const [newMessage, setNewMessage] = useState({
     isNewMessage: false,
     numNewMessage: 0,
@@ -12,10 +12,9 @@ export default function ChatBarSide() {
   const ScrollBottomRef = useRef(null);
   const [commentList, setCommentList] = useState([]);
   const [commentText, setCommentText] = useState("");
-
+  console.log("Render chatbar");
   useEffect(() => {
     document.getElementById("input_message").focus();
-    ChatListRef.current.addEventListener("scroll", handleOnScroll);
   }, []);
   useEffect(() => {
     const IsViewingHistory =
@@ -23,11 +22,6 @@ export default function ChatBarSide() {
       ChatListRef.current.scrollHeight -
         ChatListRef.current.clientHeight -
         64 * 5;
-    console.log(
-      ChatListRef.current.scrollTop,
-      ChatListRef.current.scrollHeight,
-      ChatListRef.current.clientHeight
-    );
     if (!IsViewingHistory) {
       ScrollBottomRef.current?.scrollIntoView({ behavior: "smooth" });
     } else {
@@ -40,11 +34,8 @@ export default function ChatBarSide() {
 
   const handleCommentChange = (e) => {
     setCommentText(e.target.value);
-    console.log("change " + e.target.value);
   };
   const handleCommentKeyDown = (e) => {
-    // console.log(commentList);
-    console.log("down" + commentText);
     if (e.key === "Enter") {
       e.preventDefault();
       if (commentText.trim() === "") return;
@@ -75,11 +66,20 @@ export default function ChatBarSide() {
   };
   return (
     <div className="flex flex-col bg-white h-[calc(100vh-64px)] pb-2  w-full lg:w-[348px] xl:w-[400px] ">
-      <div className="p-3  text-center border-y-2 border-gray-400">
-        <h1 className="font-medium">#368156</h1>
-        <h2>Vô chơi đi mấy đứa</h2>
+      <div className="p-3 flex justify-between border-y-2 border-gray-400">
+        <div className="">
+          <h2>Vô chơi đi mấy đứa</h2>
+          <a className="text-gray-500 hover:cursor-pointer hover:text-main-red">
+            sanke2211
+          </a>
+        </div>
+        <div className="text-right">
+          <h1 className="font-medium">#368156</h1>
+          <p className="text-gray-500">Nghe nhạc - Trữ tình</p>
+        </div>
       </div>
       <div
+        onScroll={handleOnScroll}
         ref={ChatListRef}
         className="flex flex-col flex-1 space-y-4 overflow-y-auto scrollbar p-3"
       >
@@ -98,7 +98,7 @@ export default function ChatBarSide() {
           >
             <a
               onClick={onNewMessageClick}
-              className="bg-blue-500 hover:bg-blue-600 cursor-pointer p-1 rounded-full  text-white text-base"
+              className="bg-blue-500 hover:bg-blue-600 cursor-pointer py-1 px-2 rounded-full  text-white text-base"
             >{`${newMessage.numNewMessage} tin nhắn mới`}</a>
           </div>
           <ContentEditable
@@ -123,3 +123,4 @@ export default function ChatBarSide() {
     </div>
   );
 }
+export default memo(ChatBarSide);

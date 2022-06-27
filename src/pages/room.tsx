@@ -3,14 +3,15 @@ import YouTube from "react-youtube";
 import Swal from "sweetalert2";
 import ChatBarSide from "../components/CharBarSide";
 import Popup from "../components/Popup";
-import ValidYoutubeURL, { youtube_id } from "../utils/YoutubeUtils";
+import ValidYoutubeURL, { secToTime, youtube_id } from "../utils/YoutubeUtils";
 
 export default function Room() {
+  const [timerId, setTimerId] = useState(0);
   const [youtube, setYoutube] = useState({
     url: "",
     valid_url: true,
-    title: "",
-    youtube_id: "kyck8iUOTKU",
+    title: "K'NAAN - Wavin' Flag (Coca-Cola Celebration Mix)",
+    youtube_id: "WTJSt4wP2ME",
     duration: 0,
   });
   const [like, setLike] = useState(false);
@@ -21,12 +22,9 @@ export default function Room() {
     width: "100%",
     playerVars: {
       // https://developers.google.com/youtube/player_parameters
-      autoplay: 0,
+      autoplay: 1,
+      rel: 0,
     },
-  };
-  const _onReady = (event) => {
-    // access to player in all event handlers via event.target
-    // event.target.pauseVideo();
   };
   const handleVoteClick = (e: string) => {
     if (e === "dislike") {
@@ -39,7 +37,6 @@ export default function Room() {
   };
   const handleClosePopup = (e) => {
     e.stopPropagation();
-    console.log(openAddLink);
     setOpenAddLink((e) => !e);
   };
 
@@ -55,6 +52,8 @@ export default function Room() {
         //   icon: "success",
         //   confirmButtonText: "Hay",
         // });
+        clearInterval(timerId);
+
         setYoutube({
           ...youtube,
           title: dataYoutube.title,
@@ -71,16 +70,39 @@ export default function Room() {
       setYoutube({ ...youtube, url: e.target.value, valid_url: false });
     }
   };
+  const handleKeyPressAddLink = (e) => {
+    if (e.key === "Enter") {
+      handleOnYoutubeUrlChange(e);
+    }
+  };
+  const onVideoReady = (e) => {
+    setYoutube({ ...youtube, duration: e.target.getDuration() });
+  };
+  console.log("Render Room");
+  const handleVideoPlaying = async (e) => {
+    if (e.target.getPlayerState() === 1) {
+      let idTimer = window.setInterval(() => {
+        setYoutube({
+          ...youtube,
+          duration: e.target.getDuration() - e.target.getCurrentTime(),
+        });
+      }, 1000);
+      setTimerId(idTimer);
+    } else {
+      clearInterval(timerId);
+    }
+  };
   return (
     <>
       <div className="flex flex-wrap lg:flex-nowrap animate-fadeDown">
         {/* Left Side */}
         <div className="w-full lg:flex-1 h-[calc(100vh-64px)] flex flex-col">
           <YouTube
+            onStateChange={handleVideoPlaying}
             videoId={youtube.youtube_id}
             opts={opts}
-            onReady={_onReady}
             className="h-2/3 lg:h-3/5 xl:h-4/5"
+            onReady={onVideoReady}
           />
           <div className="flex flex-wrap justify-between p-3 bg-white items-center">
             <div className="text-gray-500">
@@ -90,6 +112,7 @@ export default function Room() {
             <div className="flex space-x-2">
               <div onClick={() => handleVoteClick("like")}>
                 <VoteButton
+                  vote_num={8}
                   state={like}
                   bgColor="bg-main-green"
                   tColor="text-main-green"
@@ -98,6 +121,7 @@ export default function Room() {
               </div>
               <div onClick={() => handleVoteClick("dislike")}>
                 <VoteButton
+                  vote_num={14}
                   state={dislike}
                   bgColor="bg-main-red"
                   tColor="text-main-red"
@@ -119,6 +143,7 @@ export default function Room() {
                   <i className="fa-brands fa-youtube text-xl text-red-500"></i>
 
                   <input
+                    onKeyDown={handleKeyPressAddLink}
                     value={youtube.url}
                     onFocus={(e) => {
                       e.currentTarget.select();
@@ -146,7 +171,9 @@ export default function Room() {
           {/* Video Info */}
           <div className="mt-3 xl:my-auto text-center bg-white border-gray-300 border-2 p-3 mx-1 shadow-md">
             <h2 className="text-xl font-medium">{youtube.title}</h2>
-            <div className="text-gray-500 mt-2">Thời lượng: 1:00:00</div>
+            <div className="text-gray-500 mt-2">
+              Thời lượng: {secToTime(youtube.duration)}
+            </div>
           </div>
         </div>
         {/* Chat Bar Side */}
@@ -160,8 +187,9 @@ interface VoteButton {
   bgColor: string;
   tColor: string;
   icon: string;
+  vote_num: number;
 }
-function VoteButton({ state, bgColor, tColor, icon }: VoteButton) {
+function VoteButton({ state, bgColor, tColor, icon, vote_num }: VoteButton) {
   return (
     <div
       className={
@@ -172,7 +200,7 @@ function VoteButton({ state, bgColor, tColor, icon }: VoteButton) {
       }
     >
       <i className={`${icon} ` + (!state && `${tColor}`)}></i>
-      <span className="ml-2">88</span>
+      <span className="ml-2">{vote_num}</span>
     </div>
   );
 }

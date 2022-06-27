@@ -40,7 +40,7 @@ module.exports = {
       animation: {
         fadeDown: "1s ease-out 0s 1 fadeDown forwards",
         fadeUp: "0.5s ease-out 0s 1 fadeUp forwards",
-        fade: "1s ease-out 0s 1 fade forwards",
+        fade: "0.5s ease-out 0s 1 fade forwards",
         typing: "typing 1.5s ease-in-out infinite",
       },
     },
