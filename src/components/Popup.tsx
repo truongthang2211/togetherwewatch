@@ -19,7 +19,7 @@ export default function Popup({ trigger, children, setTrigger }: Popup) {
         <div
           className={
             "fixed bg-black bg-opacity-50 top-0 left-0 right-0 bottom-0 z-40 transition-all duration-300 ease-linear " +
-            (trigger ? "opacity-0 invisible" : "opacity-100 visible")
+            (trigger ? "opacity-100 visible" : "opacity-0 invisible")
           }
         >
           <div
