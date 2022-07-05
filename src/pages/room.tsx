@@ -6,13 +6,14 @@ import Popup from "../components/Popup";
 import ValidYoutubeURL, { secToTime, youtube_id } from "../utils/YoutubeUtils";
 
 export default function Room() {
+  const addLinkYoutubeRef = useRef(null);
   const [timerId, setTimerId] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [youtube, setYoutube] = useState({
     url: "",
     valid_url: true,
     title: "K'NAAN - Wavin' Flag (Coca-Cola Celebration Mix)",
     youtube_id: "WTJSt4wP2ME",
-    duration: 0,
   });
   const [like, setLike] = useState(false);
   const [dislike, setDiskike] = useState(false);
@@ -39,7 +40,6 @@ export default function Room() {
     e.stopPropagation();
     setOpenAddLink((e) => !e);
   };
-
   const handleOnYoutubeUrlChange = async (e) => {
     const url = e.target.value;
     if (ValidYoutubeURL(e.target.value)) {
@@ -65,6 +65,7 @@ export default function Room() {
         setOpenAddLink(false);
       } catch (error) {
         console.log(error);
+        setYoutube({ ...youtube, url: url, valid_url: false });
       }
     } else {
       setYoutube({ ...youtube, url: e.target.value, valid_url: false });
@@ -76,22 +77,27 @@ export default function Room() {
     }
   };
   const onVideoReady = (e) => {
-    setYoutube({ ...youtube, duration: e.target.getDuration() });
+    setDuration(e.target.getDuration());
   };
   console.log("Render Room");
   const handleVideoPlaying = async (e) => {
     if (e.target.getPlayerState() === 1) {
       let idTimer = window.setInterval(() => {
-        setYoutube({
-          ...youtube,
-          duration: e.target.getDuration() - e.target.getCurrentTime(),
-        });
+        setDuration(e.target.getDuration() - e.target.getCurrentTime());
       }, 1000);
       setTimerId(idTimer);
     } else {
       clearInterval(timerId);
     }
   };
+  useEffect(() => {
+    if (openAddLink) {
+      (async () => {
+        await new Promise((r) => setTimeout(r, 30));
+        addLinkYoutubeRef.current.focus();
+      })();
+    }
+  }, [openAddLink]);
   return (
     <>
       <div className="flex flex-wrap lg:flex-nowrap animate-fadeDown">
@@ -143,14 +149,15 @@ export default function Room() {
                   <i className="fa-brands fa-youtube text-xl text-red-500"></i>
 
                   <input
+                    ref={addLinkYoutubeRef}
                     onKeyDown={handleKeyPressAddLink}
                     value={youtube.url}
                     onFocus={(e) => {
                       e.currentTarget.select();
                     }}
+                    autoFocus
                     onChange={handleOnYoutubeUrlChange}
                     placeholder="Nhập đường dẫn youtube mà bạn muốn share"
-                    autoFocus
                     type="text"
                     className="py-1 px-3 outline-none w-full"
                   />
@@ -172,7 +179,7 @@ export default function Room() {
           <div className="mt-3 xl:my-auto text-center bg-white border-gray-300 border-2 p-3 mx-1 shadow-md">
             <h2 className="text-xl font-medium">{youtube.title}</h2>
             <div className="text-gray-500 mt-2">
-              Thời lượng: {secToTime(youtube.duration)}
+              Thời lượng: {secToTime(duration)}
             </div>
           </div>
         </div>
