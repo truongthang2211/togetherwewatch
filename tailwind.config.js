@@ -42,6 +42,7 @@ module.exports = {
         fadeUp: "0.5s ease-out 0s 1 fadeUp forwards",
         fade: "0.5s ease-out 0s 1 fade forwards",
         typing: "typing 1.5s ease-in-out infinite",
+        "spin-slow": "spin 3s linear infinite",
       },
     },
   },

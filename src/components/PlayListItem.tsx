@@ -1,11 +1,23 @@
 import Image from "next/image";
 
-export default function PlayListItem() {
+export default function PlayListItem({ isPlaying }) {
   return (
-    <div className="flex py-1 justify-center items-center ">
+    <div
+      className={
+        "flex justify-center items-center transition hover:-translate-y-[2px] hover:bg-opacity-80 bg-opacity-40 " +
+        (isPlaying ? "bg-main-green" : "bg-slate-100")
+      }
+    >
       <span className="text-center text-gray-900 p-3">1</span>
       <div className="flex min-w-0">
-        <div className="mr-2 w-14 h-12 relative rounded-md overflow-hidden flex-shrink-0">
+        <div
+          className={
+            "mr-2 h-12 relative overflow-hidden flex-shrink-0 " +
+            (isPlaying
+              ? "rounded-full animate-spin-slow w-12"
+              : "rounded-md  w-14")
+          }
+        >
           <Image
             layout="fill"
             className="scale-150"
@@ -46,3 +58,6 @@ export default function PlayListItem() {
     </div>
   );
 }
+PlayListItem.defaultProps = {
+  isPlaying: false,
+};

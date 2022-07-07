@@ -152,11 +152,26 @@ export default function Room() {
                 <span className="ml-2 text-sm ">Danh sách phát</span>
               </div>
               <Popup trigger={openPlaylist} setTrigger={handleOnclickPlaylist}>
-                <div className="bg-slate-100 rounded-md w-3/4 lg:w-auto max-w-lg">
-                  <div className="p-5 text-center text-gray-800 border-b-[1px] border-gray-400 text-lg">
+                <div className="overflow-hidden rounded-md w-3/4 lg:w-auto max-w-lg relative">
+                  <div className="top-3 right-4 absolute text-2xl">
+                    <i
+                      className="fa-solid fa-xmark hover:text-main-red transitron hover:cursor-pointer"
+                      onClick={handleOnclickPlaylist}
+                    ></i>
+                  </div>
+                  <div className="bg-slate-100 p-5 text-center text-gray-800 border-b-[1px] border-gray-400 text-lg">
                     Danh sách phát
                   </div>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col max-h-[484px] overflow-y-scroll scrollbar bg-slate-100 space-y-1 bg-opacity-95">
+                    <PlayListItem />
+                    <PlayListItem isPlaying={true} />
+                    <PlayListItem />
+                    <PlayListItem />
+                    <PlayListItem />
+                    <PlayListItem />
+                    <PlayListItem />
+                    <PlayListItem />
+                    <PlayListItem />
                     <PlayListItem />
                     <PlayListItem />
                     <PlayListItem />
